@@ -1,0 +1,67 @@
+# Prekladac a parametre prekladu
+Preklad=gcc -O2 -std=c99 -Wall -Wextra -pedantic
+
+all: wordcount wordcount-dynamic tail tail2
+
+#vytvorenie tail C forma
+tail: tail.c
+	$(Preklad) -o tail
+
+#vytvorenie tail C forma
+tail: tail.c
+	$(Preklad) -o tai2
+
+#vytvorenie wordcount
+wordcount: wordcount.o libhtable.a io.o 
+	$(Preklad) wordcount.o libhtable.a io.o  -o wordcount
+wordcount.o: wordcount.c libhtable.h io.h 
+	$(Preklad) -c wordcount.c
+
+#vytvorenie wordcount
+wordcount-dynamic: wordcount.c libhtable.so io.h io.o 
+	$(Preklad) wordcount.c libhtable.so io.o -o wordcount-dynamic
+
+Objektove=htab_clear.o htab_foreach.o htab_free.o htab_init.o htab_listitem_create.o htab_lookup.o htab_remove.o htab_statistics.o hash_function.o
+# vytvorenie kniznice libhtable.a
+libhtable.a: $(Objektove) 
+	ar rvs libhtable.a $(Objektove) 
+
+# vytvorenie kniznice libhtable.so
+libhtable.so: $(Objektove) 
+	gcc -shared -o libhtable.so $(Objektove)  
+
+# casti kniznic
+htab_foreach.o: htab_foreach.c 
+	$(Preklad) -fpic -c htab_foreach.c 
+
+htab_free.o: htab_free.c
+	$(Preklad) -fpic -c htab_free.c 
+
+htab_init.o: htab_init.c
+	$(Preklad) -fpic -c htab_init.c 
+
+htab_listitem_create.o: htab_listitem_create.c
+	$(Preklad) -fpic -c htab_listitem_create.c 
+
+htab_lookup.o: htab_lookup.c 
+	$(Preklad) -fpic -c htab_lookup.c 
+
+htab_remove.o: htab_remove.c
+	$(Preklad) -fpic -c htab_remove.c 
+
+htab_statistics.o: htab_statistics.c
+	$(Preklad) -fpic -c htab_statistics.c 
+
+htab_clear.o: htab_clear.c
+	$(Preklad) -fpic -c htab_clear.c 
+
+hash_function.o: hash_function.c
+	$(Preklad) -fpic -c hash_function.c 
+
+# modul io.c
+io.o: io.c io.h
+	$(Preklad) -c io.c
+
+.PHONY: clean
+clean:
+	rm -f *.o

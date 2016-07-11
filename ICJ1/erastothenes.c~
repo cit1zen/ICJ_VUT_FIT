@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include "bit-array.h"
+
+#define HORNA 100
+
+void erastosthenes(BitArray_t pole) {
+	int N=HORNA;
+
+	for (int i=2; i<=sqrt(N); i++) {
+
+		if (BA_GET_BIT_(pole,i)==0) {
+
+			for(int j=2; i*j<=N; j++) {
+				BA_SET_BIT_(pole,i*j,1);
+
+				//printf("%i\n",j*i);*/
+			}
+		}
+
+
+	}
+	/*for (int test=0;test<100;test++)
+		printf("%d %d\n",DU1_GET_BIT_(pole.pole,test),test);*/
+    TYPE prime[10];
+	for (int i=N,j=0; (i>0 && j<=9); i--) {
+
+        if (BA_GET_BIT_(pole,i)==0) {
+            //printf("%i\n",i);
+            prime[j]=i;
+            //printf("%i\n",DU1_GET_BIT_(pole.pole,i));
+            j++;
+        }
+	}
+
+    for (int i=9; i>=0; i--) {
+        printf("%i\n",prime[i]);
+    }
+}
+
+int main() {
+BitArray_t tt;
+BA_create(tt,100);
+erastosthenes(tt);
+
+return 1;
+}
+
+
